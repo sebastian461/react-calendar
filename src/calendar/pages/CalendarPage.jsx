@@ -5,23 +5,10 @@ import { addHours } from "date-fns";
 import { CalendarEvent, CalendarModal, Navbar } from "../components";
 import { localizer, getMessages } from "../helpers";
 import { useState } from "react";
-import { useUiStore } from "../../hooks";
-
-const events = [
-  {
-    title: "Cumpleaños",
-    notes: "Hay que comprar el pastel",
-    start: new Date(),
-    end: addHours(new Date(), 2),
-    bgColor: "#fafafa",
-    user: {
-      _id: "123",
-      name: "Sebastián",
-    },
-  },
-];
+import { useCalendarStore, useUiStore } from "../../hooks";
 
 export const CalendarPage = () => {
+  const { events } = useCalendarStore();
   const { openDateModal } = useUiStore();
 
   const [lastView, setLastView] = useState(

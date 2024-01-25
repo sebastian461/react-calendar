@@ -6,6 +6,7 @@ import es from "date-fns/locale/es";
 import { useMemo, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import Swal from "sweetalert2";
+import { useUiStore } from "../../hooks";
 
 registerLocale("es", es);
 
@@ -26,7 +27,8 @@ const format = "Pp";
 Modal.setAppElement("#root");
 
 export const CalendarModal = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const { closeDateModal } = useUiStore();
+  const { isDateModalOpen } = useUiStore();
 
   const [formSubmited, setFormSubmited] = useState(false);
 
@@ -57,10 +59,6 @@ export const CalendarModal = () => {
     });
   };
 
-  const onCloseModal = () => {
-    setIsOpen(false);
-  };
-
   const onSubmit = (event) => {
     event.preventDefault();
     setFormSubmited(true);
@@ -79,16 +77,12 @@ export const CalendarModal = () => {
     if (formValues.title.length <= 0) {
       throw new Error("El título no es correcto");
     }
-
-    /* 
-      TODO: Cerrar modal
-     */
   };
 
   return (
     <Modal
-      isOpen={isOpen}
-      onRequestClose={onCloseModal}
+      isOpen={isDateModalOpen}
+      onRequestClose={closeDateModal}
       style={customStyles}
       className="modal"
       overlayClassName="modal-fondo"

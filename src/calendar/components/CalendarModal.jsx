@@ -27,7 +27,7 @@ const format = "Pp";
 Modal.setAppElement("#root");
 
 export const CalendarModal = () => {
-  const { activeEvent } = useCalendarStore();
+  const { activeEvent, startSavingEvent } = useCalendarStore();
   const { closeDateModal } = useUiStore();
   const { isDateModalOpen } = useUiStore();
 
@@ -64,7 +64,7 @@ export const CalendarModal = () => {
     });
   };
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
     setFormSubmited(true);
 
@@ -82,6 +82,10 @@ export const CalendarModal = () => {
     if (formValues.title.length <= 0) {
       throw new Error("El título no es correcto");
     }
+
+    await startSavingEvent(formValues);
+    closeDateModal();
+    setFormSubmited(false);
   };
 
   return (

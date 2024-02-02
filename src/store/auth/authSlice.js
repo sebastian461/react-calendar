@@ -23,6 +23,10 @@ export const authSlice = createSlice({
       state.user = {};
       state.errorMessage = action.payload;
     },
+    onRegister: (state, action) => {
+      state.status = "authenticated";
+      state.user = action.payload;
+    },
     clearErrorMessage: (state) => {
       state.errorMessage = undefined;
     },

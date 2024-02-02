@@ -16,7 +16,7 @@ const registerFormFields = {
 };
 
 export const LoginPage = () => {
-  const { starLogin, errorMessage } = useAuthStore();
+  const { starLogin, errorMessage, starRegister } = useAuthStore();
 
   useEffect(() => {
     if (errorMessage !== undefined) {
@@ -43,13 +43,16 @@ export const LoginPage = () => {
     await starLogin({ email: loginEmail, password: loginPassword });
   };
 
-  const registerSubmit = (event) => {
+  const registerSubmit = async (event) => {
     event.preventDefault();
-    console.log({
-      registerName,
-      registerEmail,
-      registerPassword,
-      registerPassword2,
+    if (registerPassword !== registerPassword2) {
+      Swal.fire("Error en registro", "Las contraseñas no coinciden", "error");
+      return;
+    }
+    await starRegister({
+      name: registerName,
+      email: registerEmail,
+      password: registerPassword,
     });
   };
 

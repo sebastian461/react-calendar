@@ -8,5 +8,14 @@ const calendarApi = axios.create({
 });
 
 //TODO: configurar interceptores
+//* Puede interceptar las peticiones (request o response) para hacer modificaciones
+calendarApi.interceptors.request.use((config) => {
+  config.headers = {
+    ...config.headers,
+    "x-token": localStorage.getItem("token"),
+  };
+
+  return config;
+});
 
 export default calendarApi;

@@ -8,7 +8,7 @@ import {
 } from "../store/auth/authSlice";
 
 export const useAuthStore = () => {
-  const { states, user, errorMessage } = useSelector((state) => state.auth);
+  const { status, user, errorMessage } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const starLogin = async ({ email, password }) => {
@@ -49,13 +49,32 @@ export const useAuthStore = () => {
     }
   };
 
+  const checkAuthToken = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) return dispatch(onLogout());
+
+    try {
+      const { data } = await calendarApi.get("/auth/renew");
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("token-init-date", new Date().getTime());
+
+      dispatch(onLogin({ name: data.name, uid: data.uid }));
+    } catch (error) {
+      localStorage.clear();
+      dispatch(onLogout());
+    }
+  };
+
   return {
     //* Propiedades
-    states,
+    status,
     user,
     errorMessage,
 
     //* Métodos
+    checkAuthToken,
     starLogin,
     starRegister,
   };

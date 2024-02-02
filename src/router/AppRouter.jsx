@@ -5,6 +5,8 @@ import {
 } from "react-router-dom";
 import { AuthRouter } from "../auth/router/AuthRouter";
 import { CalentarRouter } from "./router/CalentarRouter";
+import { useAuthStore } from "../hooks";
+import { useEffect } from "react";
 
 const notAuthenticatedRoutes = [
   {
@@ -28,13 +30,20 @@ const authenticatedRoutes = [
   },
 ];
 
-const isAuthenticated = false;
-
-const routes = isAuthenticated
-  ? [...authenticatedRoutes]
-  : [...notAuthenticatedRoutes];
-
 export const AppRouter = () => {
+  const { status, checkAuthToken } = useAuthStore();
+
+  useEffect(() => {
+    checkAuthToken();
+  }, []);
+
+  if (status === "checking") return <h3>Cargando</h3>;
+
+  const routes =
+    status === "authenticated"
+      ? [...authenticatedRoutes]
+      : [...notAuthenticatedRoutes];
+
   const router = createBrowserRouter(routes);
 
   return <RouterProvider router={router} />;

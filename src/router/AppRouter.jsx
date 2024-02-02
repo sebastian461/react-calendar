@@ -28,7 +28,7 @@ const authenticatedRoutes = [
   },
 ];
 
-const isAuthenticated = true;
+const isAuthenticated = false;
 
 const routes = isAuthenticated
   ? [...authenticatedRoutes]

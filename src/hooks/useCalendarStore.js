@@ -5,10 +5,12 @@ import {
   onSetActiveEvent,
   onUpdateEvent,
 } from "../store/calendar/calendarSlice";
+import { calendarApi } from "../api";
 
 export const useCalendarStore = () => {
   const disptach = useDispatch();
   const { events, activeEvent } = useSelector((state) => state.calendar);
+  const { user } = useSelector((state) => state.auth);
 
   const setActiveEvent = (calendarEvent) => {
     disptach(onSetActiveEvent(calendarEvent));
@@ -22,7 +24,9 @@ export const useCalendarStore = () => {
       disptach(onUpdateEvent({ ...calendarEvent }));
     } else {
       //* Creando
-      disptach(onAddNewEvent({ _id: new Date().getTime(), ...calendarEvent }));
+      const { data } = await calendarApi.post("/events", calendarEvent);
+      console.log(data);
+      disptach(onAddNewEvent({ id: data.evento.id, ...calendarEvent, user }));
     }
   };
 

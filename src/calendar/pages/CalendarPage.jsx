@@ -9,11 +9,11 @@ import {
   Navbar,
 } from "../components";
 import { localizer, getMessages } from "../helpers";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCalendarStore, useUiStore } from "../../hooks";
 
 export const CalendarPage = () => {
-  const { events, setActiveEvent } = useCalendarStore();
+  const { events, setActiveEvent, startLoadingEvents } = useCalendarStore();
   const { openDateModal } = useUiStore();
 
   const [lastView, setLastView] = useState(
@@ -46,6 +46,10 @@ export const CalendarPage = () => {
     localStorage.setItem("lastView", event);
     setLastView(event);
   };
+
+  useEffect(() => {
+    startLoadingEvents();
+  }, []);
 
   return (
     <>
